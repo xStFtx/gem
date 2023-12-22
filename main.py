@@ -2,6 +2,7 @@ import os
 import logging
 from dotenv import load_dotenv
 import google.generativeai as genai
+import markdownify
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -15,27 +16,36 @@ def get_api_key(env_variable_name: str) -> str:
         raise ValueError(f"The environment variable '{env_variable_name}' is not set.")
     return api_key
 
-def generate_content(api_key: str, prompt: str) -> None:
+# Global API configuration
+api_key = get_api_key('API_KEY')
+genai.configure(api_key=api_key)
+
+def generate_content(prompt: str) -> None:
     try:
-        genai.configure(api_key=api_key)
         model = genai.GenerativeModel(model_name='gemini-pro')
         response = model.generate_content(prompt)
         logging.info(response.text)
     except Exception as e:
         logging.error(f"Error generating content: {e}")
 
-def handle_chat(api_key: str, prompt: str) -> None:
+
+
+def chat() -> None:
     try:
-        chat = genai.start_chat()
-        response = chat.send_message(prompt)
-        logging.info(response.text)
+        model = genai.GenerativeModel('gemini-pro')
+        with open('RESPONSE.md', 'w') as file:  # Open the file in write mode
+            while True:
+                prompt = input("Please enter your prompt: ").strip()
+                response = model.generate_content(prompt)
+                markdown_text = markdownify.markdownify(response.text)
+                print(markdown_text)
+                file.write(markdown_text + '\n\n')  # Write to the file and add a newline for separation
     except Exception as e:
         logging.error(f"Error in chat: {e}")
 
+
 def main() -> None:
     try:
-        api_key = get_api_key('API_KEY')
-
         while True:
             choice = input("Choose mode - Content (C) or Chat (Ch): ").strip().lower()
             if choice in ['c', 'ch']:
@@ -45,9 +55,9 @@ def main() -> None:
         user_prompt = input("Please enter your prompt: ").strip()
 
         if choice == 'c':
-            generate_content(api_key, user_prompt)
+            generate_content(user_prompt)
         else:
-            handle_chat(api_key, user_prompt)
+            chat()
     except Exception as e:
         logging.error(f"Error in main function: {e}")
 
