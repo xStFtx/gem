@@ -31,7 +31,7 @@ Populate the `.env` file with your API key like so:
 API_KEY=your_actual_api_key_here
 ``
 
-Ensure `your_actual_api_key_here` is replaced with the actual API key you got from Google MakerSuite.
+Ensure `your_actual_api_key_here` is replaced with the actual API key you got from [Google MakerSuite](https://makersuite.google.com/app/apikey).
 
 ### Usage
 
@@ -49,8 +49,6 @@ Let the magic unfold as Gem narrates a unique story about the magic backpack.
 - **Streamlined Configuration**: Utilize a `.env` file for straightforward API key management.
 - **Flexibility**: Tailor the narrative prompt to spawn various story genres.
 
-
-For comprehensive guidance on Gem's functionalities and customization options, visit our [documentation page](https://github.com/your-username/gem/wiki).
 
 ## Contributing
 
